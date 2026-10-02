@@ -54,7 +54,9 @@ module tt_um_brayan_snake_vga (
     reg [7:0] puntuacion;
     reg game_over;
 
-    integer i;
+    integer idx_move;
+    integer idx_collision;
+    integer idx_render;
 
     reg [5:0] siguiente_x;
     reg [4:0] siguiente_y;
@@ -84,10 +86,10 @@ module tt_um_brayan_snake_vga (
     always @(*) begin
         choque_cuerpo = 1'b0;
 
-        for (i = 1; i < 24; i = i + 1) begin
-            if ((i < longitud) &&
-                (siguiente_x == serpiente_x[i]) &&
-                (siguiente_y == serpiente_y[i]))
+        for (idx_collision = 1; idx_collision < 24; idx_collision = idx_collision + 1) begin
+            if ((idx_collision < longitud) &&
+                (siguiente_x == serpiente_x[idx_collision]) &&
+                (siguiente_y == serpiente_y[idx_collision]))
                 choque_cuerpo = 1'b1;
         end
     end
@@ -106,9 +108,9 @@ module tt_um_brayan_snake_vga (
             serpiente_x[3] <= 6'd13;
             serpiente_y[3] <= 5'd15;
 
-            for (i = 4; i < 24; i = i + 1) begin
-                serpiente_x[i] <= 6'd0;
-                serpiente_y[i] <= 5'd0;
+            for (idx_move = 4; idx_move < 24; idx_move = idx_move + 1) begin
+                serpiente_x[idx_move] <= 6'd0;
+                serpiente_y[idx_move] <= 5'd0;
             end
 
             longitud   <= 5'd4;
@@ -167,11 +169,11 @@ module tt_um_brayan_snake_vga (
                         game_over <= 1'b1;
                     end else begin
 
-                        for (i = 23; i > 0; i = i - 1) begin
-                            if ((i < longitud) ||
-                                (comio && i == longitud)) begin
-                                serpiente_x[i] <= serpiente_x[i-1];
-                                serpiente_y[i] <= serpiente_y[i-1];
+                        for (idx_move = 23; idx_move > 0; idx_move = idx_move - 1) begin
+                            if ((idx_move < longitud) ||
+                                (comio && idx_move == longitud)) begin
+                                serpiente_x[idx_move] <= serpiente_x[idx_move-1];
+                                serpiente_y[idx_move] <= serpiente_y[idx_move-1];
                             end
                         end
 
@@ -209,15 +211,15 @@ module tt_um_brayan_snake_vga (
         serpiente_pixel = 1'b0;
         cabeza_pixel = 1'b0;
 
-        for (i = 0; i < 24; i = i + 1) begin
-            if ((i < longitud) &&
-                celda_x == serpiente_x[i] &&
-                celda_y == serpiente_y[i])
+        for (idx_render = 0; idx_render < 24; idx_render = idx_render + 1) begin
+            if ((idx_render < longitud) &&
+                celda_x == serpiente_x[idx_render] &&
+                celda_y == serpiente_y[idx_render])
                 serpiente_pixel = 1'b1;
 
-            if ((i == 0) &&
-                celda_x == serpiente_x[i] &&
-                celda_y == serpiente_y[i])
+            if ((idx_render == 0) &&
+                celda_x == serpiente_x[idx_render] &&
+                celda_y == serpiente_y[idx_render])
                 cabeza_pixel = 1'b1;
         end
     end
