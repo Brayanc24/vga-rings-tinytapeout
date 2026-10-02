@@ -9,21 +9,24 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-This project generates an animated VGA pattern made of concentric rings. The
-`hvsync_generator` module creates the 640x480 timing signals. The main module
-calculates an approximate distance from the screen centre and uses that value
-to select the RGB colour of each pixel.
+This project implements a compact retro Snake game for a 640x480 VGA display.
+The `hvsync_generator` module creates the VGA timing signals. The game uses a
+40 by 30 logical grid, stores the snake as a short list of cell coordinates,
+and draws the snake and food directly from the current pixel position without
+using a framebuffer.
 
-`ui_in[0]` selects the animation speed. `ui_in[1]` selects whether the rings
-move outward or inward. The eight dedicated outputs are RGB222 colour data plus
+The snake grows when it reaches the red food, and the game ends when it hits a
+wall or its own body. The eight dedicated outputs carry RGB222 colour data plus
 horizontal and vertical sync for the Tiny VGA PMOD.
+
+Inputs are `ui_in[0]` left, `ui_in[1]` right, `ui_in[2]` up, `ui_in[3]` down,
+and `ui_in[4]` restart.
 
 ## How to test
 
 Connect the eight `uo_out` signals to a Tiny VGA PMOD or use the VGA Playground
-simulator. Set `ui_in[0]` low for slow animation or high for fast animation.
-Set `ui_in[1]` low for outward motion or high for inward motion. The design is
-clocked at 25 MHz.
+simulator. Drive one of the five control inputs to change direction or restart
+the game. The design is clocked at 25.175 MHz.
 
 ## External hardware
 

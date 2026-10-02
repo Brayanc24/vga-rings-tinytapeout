@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "VGA Hypnotic Rings"      # Project title
+  title:        "Snake VGA 1x1"      # Project title
   author:       "Brayan Carrillo"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Animated concentric rings VGA pattern controlled by two input bits"      # One line description of what your project does
+  description:  "A retro VGA Snake game with food, growth and collision detection"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     25000000       # Clock frequency in Hz (25 MHz VGA pixel clock)
 
@@ -11,7 +11,7 @@ project:
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_brayan_vga_rings"
+  top_module:  "tt_um_brayan_snake_vga"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
@@ -24,11 +24,11 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "Speed"
-  ui[1]: "Direction"
-  ui[2]: "Unused"
-  ui[3]: "Unused"
-  ui[4]: "Unused"
+  ui[0]: "Left"
+  ui[1]: "Right"
+  ui[2]: "Up"
+  ui[3]: "Down"
+  ui[4]: "Restart"
   ui[5]: "Unused"
   ui[6]: "Unused"
   ui[7]: "Unused"

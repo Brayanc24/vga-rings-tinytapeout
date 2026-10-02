@@ -27,8 +27,8 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Instantiate the VGA rings project:
-  tt_um_brayan_vga_rings user_project (
+  // Instantiate the Snake VGA project:
+  tt_um_brayan_snake_vga user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
