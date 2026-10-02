@@ -43,9 +43,9 @@ module tt_um_brayan_snake_vga (
     wire frame_tick = (hpos == 10'd0) && (vpos == 10'd0);
 
     // Version compacta para que el diseño quepa en un tile 1x1.
-    // La serpiente puede crecer hasta 12 segmentos.
-    reg [5:0] serpiente_x [0:11];
-    reg [4:0] serpiente_y [0:11];
+    // La serpiente puede crecer hasta 8 segmentos para respetar el area 1x1.
+    reg [5:0] serpiente_x [0:7];
+    reg [4:0] serpiente_y [0:7];
 
     reg [4:0] longitud;
     reg [5:0] comida_x;
@@ -88,7 +88,7 @@ module tt_um_brayan_snake_vga (
     always @(*) begin
         choque_cuerpo = 1'b0;
 
-        for (idx_collision = 1; idx_collision < 12; idx_collision = idx_collision + 1) begin
+        for (idx_collision = 1; idx_collision < 8; idx_collision = idx_collision + 1) begin
             if ((idx_collision < longitud) &&
                 (siguiente_x == serpiente_x[idx_collision]) &&
                 (siguiente_y == serpiente_y[idx_collision]))
@@ -110,7 +110,7 @@ module tt_um_brayan_snake_vga (
             serpiente_x[3] <= 6'd13;
             serpiente_y[3] <= 5'd15;
 
-            for (idx_move = 4; idx_move < 12; idx_move = idx_move + 1) begin
+            for (idx_move = 4; idx_move < 8; idx_move = idx_move + 1) begin
                 serpiente_x[idx_move] <= 6'd0;
                 serpiente_y[idx_move] <= 5'd0;
             end
@@ -171,7 +171,7 @@ module tt_um_brayan_snake_vga (
                         game_over <= 1'b1;
                     end else begin
 
-                        for (idx_move = 11; idx_move > 0; idx_move = idx_move - 1) begin
+                        for (idx_move = 7; idx_move > 0; idx_move = idx_move - 1) begin
                             if ((idx_move < longitud) ||
                                 (comio && idx_move == longitud)) begin
                                 serpiente_x[idx_move] <= serpiente_x[idx_move-1];
@@ -183,7 +183,7 @@ module tt_um_brayan_snake_vga (
                         serpiente_y[0] <= siguiente_y;
 
                         if (comio) begin
-                            if (longitud < 5'd11)
+                            if (longitud < 5'd7)
                                 longitud <= longitud + 5'd1;
 
                             puntuacion <= puntuacion + 8'd1;
@@ -213,7 +213,7 @@ module tt_um_brayan_snake_vga (
         serpiente_pixel = 1'b0;
         cabeza_pixel = 1'b0;
 
-        for (idx_render = 0; idx_render < 12; idx_render = idx_render + 1) begin
+        for (idx_render = 0; idx_render < 8; idx_render = idx_render + 1) begin
             if ((idx_render < longitud) &&
                 celda_x == serpiente_x[idx_render] &&
                 celda_y == serpiente_y[idx_render])
