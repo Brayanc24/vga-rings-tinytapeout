@@ -110,11 +110,6 @@ module tt_um_brayan_snake_vga (
             serpiente_x[3] <= 6'd13;
             serpiente_y[3] <= 5'd15;
 
-            for (idx_move = 4; idx_move < 8; idx_move = idx_move + 1) begin
-                serpiente_x[idx_move] <= 6'd0;
-                serpiente_y[idx_move] <= 5'd0;
-            end
-
             longitud   <= 5'd2;
             comida_x   <= 6'd28;
             comida_y   <= 5'd15;
@@ -230,6 +225,23 @@ module tt_um_brayan_snake_vga (
         (celda_x == comida_x) &&
         (celda_y == comida_y);
 
+    // Detalles visuales de bajo costo: cuadrícula, comida con forma de cruz,
+    // brillo del cuerpo y ojos en la cabeza.
+    wire grid_pixel =
+        (hpos[3:0] == 4'd0) ||
+        (vpos[3:0] == 4'd0);
+
+    wire comida_icon = comida_pixel &&
+        (((hpos[3:0] >= 4'd6) && (hpos[3:0] <= 4'd9)) ||
+         ((vpos[3:0] >= 4'd6) && (vpos[3:0] <= 4'd9)));
+
+    wire cabeza_ojo = cabeza_pixel &&
+        (((hpos[3:0] == 4'd4) || (hpos[3:0] == 4'd11)) &&
+         ((vpos[3:0] == 4'd4) || (vpos[3:0] == 4'd5)));
+
+    wire cuerpo_brillo = serpiente_pixel &&
+        ((hpos[3:0] == 4'd1) || (vpos[3:0] == 4'd1));
+
     wire pared_pixel =
         (celda_x == 0) ||
         (celda_x == 39) ||
@@ -285,15 +297,23 @@ module tt_um_brayan_snake_vga (
             rojo = 2'b11;
             verde = 2'b11;
             azul = 2'b11;
+        end else if (cabeza_ojo) begin
+            rojo = 2'b00;
+            verde = 2'b00;
+            azul = 2'b00;
         end else if (cabeza_pixel) begin
             rojo = 2'b11;
             verde = 2'b11;
             azul = 2'b00;
+        end else if (cuerpo_brillo) begin
+            rojo = 2'b01;
+            verde = 2'b11;
+            azul = 2'b11;
         end else if (serpiente_pixel) begin
             rojo = 2'b00;
             verde = 2'b11;
             azul = 2'b01;
-        end else if (comida_pixel) begin
+        end else if (comida_icon) begin
             rojo = 2'b11;
             verde = 2'b00;
             azul = 2'b00;
@@ -301,6 +321,10 @@ module tt_um_brayan_snake_vga (
             rojo = 2'b01;
             verde = 2'b00;
             azul = 2'b11;
+        end else if (grid_pixel) begin
+            rojo = 2'b00;
+            verde = 2'b01;
+            azul = 2'b10;
         end else begin
             rojo = 2'b00;
             verde = 2'b00;
